@@ -1,0 +1,44 @@
+{% include 'head.html' %}
+{% block head %}
+    <title>MagicBooks-Login</title>
+{% endblock %}
+
+<body style="padding-right: 0px;padding-left: 0px;padding-bottom: 0px;">
+
+{% include 'topbar.html' %}
+{% block topbar %}
+{% endblock %}
+
+<main class="page login-page">
+    <section class="clean-block clean-form">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">登陆</h2>
+            </div>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div style="margin-bottom: 8px;">用户名</div>
+                    <input class="form-control item" type="text" id="username" name="username">
+                </div>
+                <div class="form-group">
+                    <div style="margin-bottom: 8px;">密码</div>
+                    <input class="form-control" type="password" id="password" name="password">
+                </div>
+                <div><span style="color: red">{{ erro_msg }}</span></div>
+                <div style="text-align: center;color: red">{{ msg_erro }}</div>
+
+                <button type="submit" class="btn btn-primary btn-block">登陆</button>
+                <div>&nbsp;</div>
+                <a href="/logon/" class="btn btn-primary btn-block">注册</a>
+            </form>
+
+
+        </div>
+    </section>
+</main>
+
+
+</body>
+</html>

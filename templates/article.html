@@ -1,0 +1,72 @@
+{% include 'head.html' %}
+{% block head %}
+    <title>MagicBooks-Blog</title>
+{% endblock %}
+
+<body style="padding-right: 0px;padding-left: 0px;padding-bottom: 0px;">
+
+{% include 'topbar.html' %}
+{% block topbar %}
+{% endblock %}
+<style type="text/css">
+    img {
+        width: 30%;
+        {#display: none;#}
+    }
+</style>
+
+
+<main class="page blog-post-list">
+    <section class="clean-block clean-blog-list">
+        <div class="container">
+            <div class="block-heading">
+                <div class="block-content">
+                <div><h3 class="text-info">实时显示标签</h3></div>
+                {% for tag in tags %}
+                    <a href="#" class="badge badge-primary">{{ tag.name }}</a>
+                {% endfor %}
+                </div>
+
+
+{#                <h2 class="text-info">Blog List</h2>#}
+
+
+            </div>
+
+            <div class="block-content">
+                {% for i in article %}
+                    <div class="clean-blog-post">
+                        <div class="row">
+                            <div>
+                                {#文章标题#}
+                                <h3>{{ i.title }}</h3>
+                                {#发表时间及发表人#}
+                                <div class="info">
+                                    <span class="text-muted">{{ i.date }}
+                                    <span>{{ i.user }}</span>
+                                    </span>
+                                </div>
+                                {#文章摘要#}
+                                <p>
+                                    {{ i.get_comment_text_md|truncatechars:80 }}
+                                </p>
+
+                                <a href=""><a class="btn btn-outline-primary btn-sm" href="{% url 'read' i.id %}">
+                                    Read More
+                                </a></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+
+
+</html>

@@ -1,0 +1,374 @@
+{#{% load staticfiles %}#}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>正在创作</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/media/favicon.ico"/>
+    <link href="/static/mdeditor/css/editormd.css" type="text/css" media="all" rel="stylesheet">
+    <script type="text/javascript" src="/static/mdeditor/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/mdeditor/js/editormd.min.js"></script>
+    <meta name="robots" content="NONE,NOARCHIVE">
+    <link type="text/css" rel="stylesheet" href="/static/mdeditor/js/lib/codemirror/codemirror.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/mdeditor/js/lib/codemirror/addon/dialog/dialog.css">
+    <link type="text/css" rel="stylesheet"
+          href="/static/mdeditor/js/lib/codemirror/addon/search/matchesonscrollbar.css">
+    <script id="-static-mdeditor-js-lib-codemirror-codemirror-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/codemirror/codemirror.min.js"></script>
+    <script id="-static-mdeditor-js-lib-codemirror-modes-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/codemirror/modes.min.js"></script>
+    <script id="-static-mdeditor-js-lib-codemirror-addons-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/codemirror/addons.min.js"></script>
+    <script id="-static-mdeditor-js-lib-marked-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/marked.min.js"></script>
+    <script id="-static-mdeditor-js-lib-prettify-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/prettify.min.js"></script>
+    <script id="-static-mdeditor-js-lib-raphael-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/raphael.min.js"></script>
+    <script id="-static-mdeditor-js-lib-underscore-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/underscore.min.js"></script>
+    <script id="-static-mdeditor-js-lib-flowchart-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/flowchart.min.js"></script>
+    <script id="-static-mdeditor-js-lib-jquery-flowchart-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/jquery.flowchart.min.js"></script>
+    <script id="-static-mdeditor-js-lib-sequence-diagram-min" type="text/javascript"
+            src="/static/mdeditor/js/lib/sequence-diagram.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css">
+    <script id="-cdnjs-cloudflare-com-ajax-libs-KaTeX-0-3-0-katex-min" type="text/javascript"
+            src="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.js"></script>
+
+
+</head>
+
+<body>
+<nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+    <div class="container">
+        <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
+                class="navbar-toggler-icon"></span></button>
+        <a class="navbar-brand logo" href="/index/">MagicBooks</a>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <div>： 您正在进行一个伟大的创作...</div>
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item" role="presentation"><a class="nav-link " href='/index/'>首页</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link " href="/article/">文章</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link " href="/about/">关于本站</a></li>
+                {% if active == 0 %}
+                    <li class="nav-item" role="presentation"><a class="nav-link " href="/login/">登陆/注册</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item" role="presentation"><a class="nav-link " href="/user_info/">{{ username }}</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<form action="" method="post" style="margin-top: 90px;">
+    {% csrf_token %}
+    <div style="margin-left: 30px;">
+
+        <div class="input-group mb-3 col-md-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">标题</span>
+            </div>
+            <input placeholder="请输入标题" type="text" class="form-control" aria-label="Sizing example input" name="title"
+                   aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <div class="input-group mb-3 col-md-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">作者</span>
+            </div>
+            <input readonly="readonly" placeholder="{{ username }}" type="text" class="form-control"
+                   aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <div class="input-group mb-3 col-md-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">标签</span>
+            </div>
+            <input type="text" class="form-control" placeholder="建议2-4字单个词" aria-label="Sizing example input" name="tag"
+                   aria-describedby="inputGroup-sizing-default">
+        </div>
+
+    </div>
+
+    <div>
+
+        <style type="text/css">
+            .wmd-wrapper ul {
+                margin-left: 0px !important;
+            }
+
+            .wmd-wrapper ul li {
+                list-style: disc !important;
+            }
+
+            .wmd-wrapper ul ul li {
+                list-style: circle !important;
+            }
+
+            .wmd-wrapper h1,
+            .wmd-wrapper h2,
+            .wmd-wrapper h3,
+            .wmd-wrapper h4,
+            .wmd-wrapper h5,
+            .wmd-wrapper h6 {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+
+            .wmd-wrapper h2,
+            .wmd-wrapper h3,
+            .wmd-wrapper h4 {
+                padding: 0px !important;
+            }
+
+            .wmd-wrapper h5 {
+                letter-spacing: 0px !important;
+                text-transform: none !important;
+                font-size: 1em !important;
+            }
+
+            .wmd-wrapper h6 {
+                font-size: 1em !important;
+                color: #777 !important;
+            }
+        </style>
+        <script type="text/javascript">
+
+            $(function () {
+                editormd("id_content-wmd-wrapper", {
+                    watch: true, // 关闭实时预览
+                    lineNumbers: false,
+                    lineWrapping: false,
+                    width: "100%",
+                    height: 500,
+                    placeholder: '',
+                    // 当有多个mdeditor时，全屏后，其他mdeditor仍然显示，解决此问题。
+                    onfullscreen: function () {
+                        this.editor.css("border-radius", 0).css("z-index", 9999);
+                    },
+                    onfullscreenExit: function () {
+                        this.editor.css({
+                            zIndex: 10,
+                            border: "1px solid rgb(221,221,221)"
+                        })
+                    },
+                    syncScrolling: "single",
+                    path: "/static/mdeditor/js/lib/",
+                    // theme
+                    theme: "default",
+                    previewTheme: "default",
+                    editorTheme: "default",
+
+                    saveHTMLToTextarea: true, // editor.md 有问题没有测试成功
+                    toolbarAutoFixed: true,
+                    searchReplace: true,
+                    emoji: true,
+                    tex: true,
+                    flowChart: true,
+                    sequenceDiagram: true,
+
+                    // image upload
+                    imageUpload: true,
+                    imageFormats: ['jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF', 'png', 'PNG', 'bmp', 'BMP', 'webp', 'WEBP'],
+                    imageUploadURL: "/mdeditor/uploads/",
+                    toolbarIcons: function () {
+                        return ['undo', 'redo', '|', 'bold', 'del', 'italic', 'quote', 'ucwords', 'uppercase', 'lowercase', '|', 'h1', 'h2', 'h3', 'h5', 'h6', '|', 'list-ul', 'list-ol', 'hr', '|', 'link', 'reference-link', 'image', 'code', 'preformatted-text', 'code-block', 'table', 'datetime', 'emoji', 'html-entities', 'pagebreak', 'goto-line', '|', 'help', 'info', '||', 'preview', 'watch', 'fullscreen']
+                    },
+                    onload: function () {
+                        console.log('onload', this);
+                        //this.fullscreen();
+                        //this.unwatch();
+                        //this.watch().fullscreen();
+
+                        //this.setMarkdown("#PHP");
+                        //this.width("100%");
+                        //this.height(480);
+                        //this.resize("100%", 640);
+                    }
+                });
+
+            });
+        </script>
+        <div class="wmd-wrapper editormd editormd-vertical editormd-theme-default" id="id_content-wmd-wrapper"
+             style="width: 100%; height: 500px;"><textarea cols="40" id="id_content" name="content" rows="10"
+                                                           required=""
+                                                           class="editormd-markdown-textarea" placeholder=""
+                                                           style="display: none;"></textarea>
+            <div class="CodeMirror cm-s-default"
+                 style="font-size: 13px; width: 665px; margin-top: 40px; height: 461px;">
+                <div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 13px;"><textarea
+                        autocorrect="off" autocapitalize="off" spellcheck="false"
+                        style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none;"
+                        tabindex="0"></textarea></div>
+                <div class="CodeMirror-vscrollbar" cm-not-content="true">
+                    <div style="min-width: 1px; height: 0px;"></div>
+                </div>
+                <div class="CodeMirror-hscrollbar" cm-not-content="true">
+                    <div style="height: 100%; min-height: 1px; width: 0px;"></div>
+                </div>
+                <div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
+                <div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
+                <div class="CodeMirror-scroll" tabindex="-1">
+                    <div class="CodeMirror-sizer"
+                         style="margin-left: 1px; margin-bottom: -7px; border-right-width: 23px; min-width: 15px; min-height: 30px; padding-right: 0px; padding-bottom: 0px;">
+                        <div style="position: relative; top: 0px;">
+                            <div class="CodeMirror-lines">
+                                <div style="position: relative; outline: none;">
+                                    <div class="CodeMirror-measure"><span><span>​</span>x</span></div>
+                                    <div class="CodeMirror-measure"></div>
+                                    <div style="position: relative; z-index: 1;"></div>
+                                    <div class="CodeMirror-cursors" style="">
+                                        <div class="CodeMirror-cursor" style="left: 12px; top: 0px; height: 22px;">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                    <div class="CodeMirror-code">
+                                        <div class="CodeMirror-activeline" style="position: relative;">
+                                            <div class="CodeMirror-activeline-background CodeMirror-linebackground"></div>
+                                            <pre class=""><span style="padding-right: 0.1px;"><span
+                                                    cm-text="">​</span></span></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position: absolute; height: 23px; width: 1px; top: 30px;"></div>
+                    <div class="CodeMirror-gutters" style="height: 520px; border-right: none;">
+                        <div class="CodeMirror-gutter CodeMirror-foldgutter"></div>
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:;" class="fa fa-close editormd-preview-close-btn"></a>
+            <textarea class="editormd-html-textarea" name="id_content-wmd-wrapper-html-code"></textarea>
+            <div class="editormd-preview editormd-preview-theme-default"
+                 style="display: block; width: 664px; top: 40px; height: 461px;">
+                <div class="markdown-body editormd-preview-container" previewcontainer="true"
+                     style="padding: 20px;"></div>
+            </div>
+            <div class="editormd-container-mask" style="display: none;"></div>
+            <div class="editormd-mask"></div>
+            <div class="editormd-toolbar" style="display: block;">
+                <div class="editormd-toolbar-container">
+                    <ul class="editormd-menu">
+                        <li class="pull-right"><a href="javascript:;" title="全屏（按ESC还原）" unselectable="on"><i
+                                class="fa fa-arrows-alt" name="fullscreen" unselectable="on"></i></a></li>
+                        <li class="pull-right"><a href="javascript:;" title="关闭实时预览" unselectable="on"><i
+                                class="fa fa-eye-slash" name="watch" unselectable="on"></i></a></li>
+                        <li class="pull-right"><a href="javascript:;" title="全窗口预览HTML（按 Shift + ESC还原）"
+                                                  unselectable="on"><i
+                                class="fa fa-desktop" name="preview" unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="撤销（Ctrl+Z）" unselectable="on"><i class="fa fa-undo"
+                                                                                           name="undo"
+                                                                                           unselectable="on"></i></a>
+                        </li>
+                        <li><a href="javascript:;" title="重做（Ctrl+Y）" unselectable="on"><i class="fa fa-repeat"
+                                                                                           name="redo"
+                                                                                           unselectable="on"></i></a>
+                        </li>
+                        <li class="divider" unselectable="on">|</li>
+                        <li><a href="javascript:;" title="粗体" unselectable="on"><i class="fa fa-bold" name="bold"
+                                                                                   unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="删除线" unselectable="on"><i class="fa fa-strikethrough"
+                                                                                    name="del"
+                                                                                    unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="斜体" unselectable="on"><i class="fa fa-italic" name="italic"
+                                                                                   unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="引用" unselectable="on"><i class="fa fa-quote-left" name="quote"
+                                                                                   unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="将每个单词首字母转成大写" unselectable="on"><i class="fa" name="ucwords"
+                                                                                             style="font-size:20px;margin-top: -3px;">Aa</i></a>
+                        </li>
+                        <li><a href="javascript:;" title="将所选转换成大写" unselectable="on"><i class="fa fa-font"
+                                                                                         name="uppercase"
+                                                                                         unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="将所选转换成小写" unselectable="on"><i class="fa" name="lowercase"
+                                                                                         style="font-size:24px;margin-top: -10px;">a</i></a>
+                        </li>
+                        <li class="divider" unselectable="on">|</li>
+                        <li><a href="javascript:;" title="标题1" unselectable="on"><i class="fa editormd-bold" name="h1"
+                                                                                    unselectable="on">H1</i></a></li>
+                        <li><a href="javascript:;" title="标题2" unselectable="on"><i class="fa editormd-bold" name="h2"
+                                                                                    unselectable="on">H2</i></a></li>
+                        <li><a href="javascript:;" title="标题3" unselectable="on"><i class="fa editormd-bold" name="h3"
+                                                                                    unselectable="on">H3</i></a></li>
+                        <li><a href="javascript:;" title="标题5" unselectable="on"><i class="fa editormd-bold" name="h5"
+                                                                                    unselectable="on">H5</i></a></li>
+                        <li><a href="javascript:;" title="标题6" unselectable="on"><i class="fa editormd-bold" name="h6"
+                                                                                    unselectable="on">H6</i></a></li>
+                        <li class="divider" unselectable="on">|</li>
+                        <li><a href="javascript:;" title="无序列表" unselectable="on"><i class="fa fa-list-ul"
+                                                                                     name="list-ul"
+                                                                                     unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="有序列表" unselectable="on"><i class="fa fa-list-ol"
+                                                                                     name="list-ol"
+                                                                                     unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="横线" unselectable="on"><i class="fa fa-minus" name="hr"
+                                                                                   unselectable="on"></i></a></li>
+                        <li class="divider" unselectable="on">|</li>
+                        <li><a href="javascript:;" title="链接" unselectable="on"><i class="fa fa-link" name="link"
+                                                                                   unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="引用链接" unselectable="on"><i class="fa fa-anchor"
+                                                                                     name="reference-link"
+                                                                                     unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="添加图片" unselectable="on"><i class="fa fa-picture-o"
+                                                                                     name="image"
+                                                                                     unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="行内代码" unselectable="on"><i class="fa fa-code" name="code"
+                                                                                     unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="预格式文本 / 代码块（缩进风格）" unselectable="on"><i
+                                class="fa fa-file-code-o"
+                                name="preformatted-text"
+                                unselectable="on"></i></a>
+                        </li>
+                        <li><a href="javascript:;" title="代码块（多语言风格）" unselectable="on"><i class="fa fa-file-code-o"
+                                                                                           name="code-block"
+                                                                                           unselectable="on"></i></a>
+                        </li>
+                        <li><a href="javascript:;" title="添加表格" unselectable="on"><i class="fa fa-table" name="table"
+                                                                                     unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="日期时间" unselectable="on"><i class="fa fa-clock-o"
+                                                                                     name="datetime"
+                                                                                     unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="Emoji表情" unselectable="on"><i class="fa fa-smile-o"
+                                                                                        name="emoji"
+                                                                                        unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="HTML实体字符" unselectable="on"><i class="fa fa-copyright"
+                                                                                         name="html-entities"
+                                                                                         unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="插入分页符" unselectable="on"><i class="fa fa-newspaper-o"
+                                                                                      name="pagebreak"
+                                                                                      unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="跳转到行" unselectable="on"><i class="fa fa-terminal"
+                                                                                     name="goto-line"
+                                                                                     unselectable="on"></i></a></li>
+                        <li class="divider" unselectable="on">|</li>
+                        <li><a href="javascript:;" title="使用帮助" unselectable="on"><i class="fa fa-question-circle"
+                                                                                     name="help"
+                                                                                     unselectable="on"></i></a></li>
+                        <li><a href="javascript:;" title="关于Editor.md" unselectable="on"><i class="fa fa-info-circle"
+                                                                                            name="info"
+                                                                                            unselectable="on"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center"><span style="color:red;">{{ msg_erro }}</span></div>
+    <div style="margin-right: 30px;">
+        <button type="submit" class="pull-right btn btn-primary">发布</button>
+    </div>
+
+
+</form>
+
+</body>
+
+
+</html>

@@ -1,0 +1,41 @@
+{% include 'head.html' %}
+{% block head %}
+    <title>MagicBooks-Blog</title>
+{% endblock %}
+
+<body style="padding-right: 0px;padding-left: 0px;padding-bottom: 0px;">
+
+<style type="text/css">
+    img {
+        width: 100%;
+    }
+</style>
+
+
+{% include 'topbar.html' %}
+{% block topbar %}
+{% endblock %}
+<main class="page blog-post-list">
+    <section class="clean-block clean-blog-list ">
+        <div class="container block-content">
+            {% for i in article_info %}
+                <h2>{{ i.title }}</h2>
+                <div class="info">
+                    <span>作者:{{ i.user }}</span>
+                </div>
+                    <a href="#" class="badge badge-primary">{{ tags }}</a>
+
+                <hr>
+                <div style="word-break: break-all">
+                    {{ i.get_comment_text_md }}
+                </div>
+            {% endfor %}
+            <hr>
+            <a class="btn btn-outline-primary btn-sm" href="/article/"> 返 回 </a>
+        </div>
+
+    </section>
+
+</main>
+</body>
+</html>

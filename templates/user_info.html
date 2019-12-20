@@ -1,0 +1,216 @@
+{% include 'head.html' %}
+{% block head %}
+    <title>MagicBooks-User</title>
+{% endblock %}
+
+<body style="padding-right: 0px;padding-left: 0px;padding-bottom: 0px;">
+
+{% include 'topbar.html' %}
+{% block topbar %}
+{% endblock %}
+
+
+<main class="page blog-post-list">
+    <section class="clean-block clean-blog-list">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">Welcome {{ username }}!</h2>
+
+            </div>
+            <div class="block-content">
+
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab"
+                           aria-controls="home" aria-selected="true">Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="bloglist-tab" data-toggle="tab" href="#bloglist" role="tab"
+                           aria-controls="bloglist" aria-selected="false">Blog List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                           aria-controls="contact" aria-selected="false">Contact</a>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+
+                    <div class="tab-pane fade show active col-md-10" id="info"
+                         role="tabpanel" aria-labelledby="info-tab">
+                        {% for i in user %}
+                            <form>
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Username</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" readonly class="form-control-plaintext"
+                                               value="{{ i.username }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                               value="{{ i.email }}">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row" style="display: none">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Tel</label>
+                                    <div class="col-sm-10">
+
+                                        <input type="text" class="form-control col-md-3" placeholder="Phone"
+                                               value="{{ i.phone }}">
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control col-md-3" id="inputPassword"
+                                               placeholder="Password">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control col-md-3" id="inputPassword"
+                                               placeholder="Password">
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="button" class="btn btn-success">确认修改信息</button>
+
+                                {#                                <button type="button" class="btn btn-primary">退出登陆</button>#}
+
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#exampleModal">
+                                    退出登陆
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="text-align: center">
+                                                <h5 class="modal-title" id="exampleModalLabel">是否退出</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body" style="display: none">
+
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <a href="/logout/">
+                                                    <button type="button" class="btn btn-primary">Log out</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        {% endfor %}
+
+
+                    </div>
+
+                    <div class="tab-pane fade" id="bloglist" role="tabpanel" aria-labelledby="bloglist-tab">
+                        <div>
+                            <h5 style="margin-top: 10px;margin-bottom: 10px;">您共创作了 {{ user_article|length }} 篇文章</h5>
+
+
+                        </div>
+                        <div class="block-content">
+                            {% for i in user_article %}
+                                <div class="clean-blog-post">
+                                    <div class="row">
+                                        <div>
+                                            {#文章标题#}
+                                            <h3>{{ i.title }}</h3>
+                                            {#发表时间及发表人#}
+                                            <div class="info">
+                                    <span class="text-muted">{{ i.date }}
+                                    <span>{{ i.user }}</span>
+                                    </span>
+                                            </div>
+                                            {#文章摘要#}
+                                            <p>
+                                                {{ i.get_comment_text_md|truncatechars:80 }}
+                                            </p>
+                                            <br>
+                                            <!-- Large modal -->
+                                            <a href=""><a class="btn btn-outline-primary btn-sm" href="{% url 'read' i.id %}">
+                                                Read More
+                                            </a></a>
+                                            <a href=""><a class="btn btn-outline-primary btn-sm" href="{% url 'delarticle' i.id %}">
+                                                Delete
+                                            </a></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+
+                    <div style="text-align: center" class="tab-pane fade" id="contact" role="tabpanel"
+                         aria-labelledby="contact-tab">
+                        <br>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <span>在此处可以联系站长或留下您宝贵的意见</>
+                            <div class="input-group">
+                                <textarea name="msg" class="form-control" aria-label="With textarea"> </textarea>
+                            </div>
+                            <div>联系方式</div>
+                            <div class="input-group">
+                                <select name="fs" class="custom-select col-md-2" id="inputGroupSelect04"
+                                        aria-label="Example select with button addon">
+                                    <option selected>联系方式</option>
+                                    <option value="Email">Email</option>
+                                    <option value="WeChat">WeChat</option>
+                                    <option value="QQ">QQ</option>
+                                </select>
+
+                                <div>
+                                    <input name="urls" type="text" class="form-control" placeholder="推荐使用Email">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                提交
+                            </button>
+
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+
+
+</html>
